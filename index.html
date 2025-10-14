@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aplikasi Hitung Penjualan Bensin</title>
+    <style>
+      :root {
+        --primary: #2e7d32;
+        --secondary: #1b5e20;
+        --accent: #d4af37;
+        --bg: #f4f7f6;
+        --text: #333;
+        --card: #fff;
+      }
+
+      [data-theme="dark"] {
+        --primary: #81c784;
+        --secondary: #388e3c;
+        --accent: #c9a227;
+        --bg: #121212;
+        --text: #eee;
+        --card: #1e1e1e;
+      }
+
+      * {
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        margin: 0;
+        padding: 25px;
+        transition: background 0.5s, color 0.5s;
+      }
+
+      h2 {
+        text-align: center;
+        font-weight: 600;
+        color: var(--primary);
+        margin-bottom: 40px;
+      }
+
+      .container {
+        max-width: 850px;
+        margin: auto;
+        background: var(--card);
+        border-radius: 18px;
+        padding: 35px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        transition: background 0.5s;
+      }
+
+      label {
+        display: block;
+        font-weight: 600;
+        margin-top: 15px;
+        color: var(--primary);
+      }
+
+      select,
+      input {
+        width: 100%;
+        padding: 10px 12px;
+        margin-top: 5px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+        background: var(--card);
+        color: var(--text);
+        transition: border-color 0.3s, background 0.3s;
+      }
+
+      select:focus,
+      input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+      }
+
+      .pengeluaran-item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .pengeluaran-item select,
+      .pengeluaran-item input {
+        flex: 1;
+      }
+
+      .pengeluaran-item button {
+        background: none;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        color: #d32f2f;
+      }
+
+      button {
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.3s;
+      }
+
+      .btn-tambah {
+        background: var(--secondary);
+        color: white;
+        padding: 8px 14px;
+        font-size: 14px;
+        margin-top: 15px;
+      }
+
+      .btn-tambah:hover {
+        background: var(--primary);
+        transform: scale(1.03);
+      }
+
+      .main {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        color: white;
+        padding: 12px;
+        width: 100%;
+        font-size: 16px;
+        margin-top: 20px;
+        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+      }
+
+      .main:hover {
+        transform: scale(1.02);
+      }
+
+      .result {
+        background: var(--card);
+        border-left: 5px solid var(--accent);
+        margin-top: 30px;
+        padding: 20px;
+        border-radius: 12px;
+        line-height: 1.7;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        animation: fadeIn 0.4s ease-in-out;
+      }
+
+      .result h3 {
+        color: var(--primary);
+        margin-top: 0;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 600px) {
+        body {
+          padding: 15px;
+        }
+        .container {
+          padding: 20px;
+        }
+        .pengeluaran-item {
+          flex-direction: column;
+        }
+      }
+
+      .theme-indicator {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--accent);
+        color: #000;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: bold;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+      }
+      footer {
+        text-align: center;
+        margin-top: 30px;
+        color: white;
+        font-size: 14px;
+        padding: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="theme-indicator" id="themeIndicator">☀️ Mode Terang</div>
+
+    <div class="container">
+      <label>Jenis Bensin</label>
+      <select id="jenis">
+        <option value="pertalite">Pertalite (Rp10.000)</option>
+        <option value="pertamax">Pertamax (Rp12.200)</option>
+      </select>
+
+      <div id="literInputs">
+        <label>Liter Awal Mesin 1</label>
+        <input
+          type="number"
+          id="awal1"
+          step="0.01"
+          placeholder="Misal: 100.00"
+        />
+
+        <label>Liter Akhir Mesin 1</label>
+        <input
+          type="number"
+          id="akhir1"
+          step="0.01"
+          placeholder="Misal: 350.00"
+        />
+      </div>
+
+      <div id="literInputs2" style="display: none">
+        <label>Liter Awal Mesin 2</label>
+        <input
+          type="number"
+          id="awal2"
+          step="0.01"
+          placeholder="Misal: 200.00"
+        />
+
+        <label>Liter Akhir Mesin 2</label>
+        <input
+          type="number"
+          id="akhir2"
+          step="0.01"
+          placeholder="Misal: 500.00"
+        />
+      </div>
+
+      <h3 style="margin-top: 25px; color: var(--primary)">💸 Pengeluaran</h3>
+      <div id="pengeluaranList"></div>
+      <button type="button" class="btn-tambah" onclick="tambahPengeluaran()">
+        + Tambah Pengeluaran
+      </button>
+
+      <button class="main" onclick="hitung()">Hitung Total</button>
+
+      <div class="result" id="hasil"></div>
+    </div>
+    <footer>Copyright Bagus Pamungkas</footer>
+    <script>
+      // 🌗 Auto Dark Mode
+      const hour = new Date().getHours();
+      if (hour >= 18 || hour < 6) {
+        document.documentElement.setAttribute("data-theme", "dark");
+        document.getElementById("themeIndicator").textContent = "🌙 Mode Gelap";
+      }
+
+      document.getElementById("jenis").addEventListener("change", function () {
+        document.getElementById("literInputs2").style.display =
+          this.value === "pertamax" ? "block" : "none";
+      });
+
+      function tambahPengeluaran() {
+        const div = document.createElement("div");
+        div.className = "pengeluaran-item";
+        div.innerHTML = `
+          <select class="jenis-pengeluaran">
+            <option value="Setor">Setor</option>
+            <option value="Mandiri">Mandiri</option>
+            <option value="My Pertamina">My Pertamina</option>
+            <option value="Logam">Logam</option>
+            <option value="Uang Makan">Uang Makan</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+          <input type="number" class="nilai-pengeluaran" placeholder="Nominal (Rp)" step="100">
+          <input type="text" class="keterangan-pengeluaran" placeholder="Keterangan (opsional)">
+          <button type="button" onclick="hapusPengeluaran(this)">❌</button>
+        `;
+        document.getElementById("pengeluaranList").appendChild(div);
+      }
+
+      function hapusPengeluaran(btn) {
+        btn.parentElement.remove();
+      }
+
+      function formatRupiah(angka) {
+        return angka.toLocaleString("id-ID", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+      }
+
+      function hitung() {
+        const jenis = document.getElementById("jenis").value;
+        const awal1 = parseFloat(document.getElementById("awal1").value) || 0;
+        const akhir1 = parseFloat(document.getElementById("akhir1").value) || 0;
+        const harga = jenis === "pertalite" ? 10000 : 12200;
+
+        let liter1 = akhir1 - awal1;
+        let liter2 = 0;
+        let pendapatanMesin1 = liter1 * harga;
+        let pendapatanMesin2 = 0;
+
+        if (jenis === "pertamax") {
+          const awal2 = parseFloat(document.getElementById("awal2").value) || 0;
+          const akhir2 =
+            parseFloat(document.getElementById("akhir2").value) || 0;
+          liter2 = akhir2 - awal2;
+          pendapatanMesin2 = liter2 * harga;
+        }
+
+        const totalLiter = liter1 + liter2;
+        const totalPendapatan = pendapatanMesin1 + pendapatanMesin2;
+
+        // Hitung pengeluaran
+        const pengeluaranEls = document.querySelectorAll(".pengeluaran-item");
+        let totalPengeluaran = 0;
+        let rincian = "";
+        pengeluaranEls.forEach((el) => {
+          const jenisP = el.querySelector(".jenis-pengeluaran").value;
+          const nilai =
+            parseFloat(el.querySelector(".nilai-pengeluaran").value) || 0;
+          const ket = el.querySelector(".keterangan-pengeluaran").value.trim();
+
+          if (nilai > 0) {
+            totalPengeluaran += nilai;
+            rincian += `<br> - ${jenisP}: Rp ${formatRupiah(nilai)} ${
+              ket ? "(" + ket + ")" : ""
+            }`;
+          }
+        });
+
+        const hasilAkhir = totalPendapatan - totalPengeluaran;
+
+        document.getElementById("hasil").innerHTML = `
+          <h3>🧾 Hasil Perhitungan</h3>
+          Jenis Bensin: <b>${jenis.toUpperCase()}</b><br>
+          <b>Mesin 1:</b> ${formatRupiah(liter1)} liter — Rp ${formatRupiah(
+          pendapatanMesin1
+        )}<br>
+          ${
+            jenis === "pertamax"
+              ? `<b>Mesin 2:</b> ${formatRupiah(
+                  liter2
+                )} liter — Rp ${formatRupiah(pendapatanMesin2)}<br>`
+              : ""
+          }
+          <br><b>Total Liter Terjual:</b> ${formatRupiah(totalLiter)} liter<br>
+          <b>Total Pendapatan Sebelum Pengeluaran:</b> Rp ${formatRupiah(
+            totalPendapatan
+          )}<br>
+          ${rincian ? `<br><b>Pengeluaran:</b>${rincian}<br>` : ""}
+          <br><b>Total Akhir:</b> Rp ${formatRupiah(hasilAkhir)}
+        `;
+      }
+    </script>
+  </body>
+</html>
