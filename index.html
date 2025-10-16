@@ -307,10 +307,13 @@
         let pendapatanMesin1 = liter1 * harga;
         let pendapatanMesin2 = 0;
 
+        // Deklarasi di luar IF biar bisa digunakan di hasil
+        let awal2 = 0;
+        let akhir2 = 0;
+
         if (jenis === "pertamax") {
-          const awal2 = parseFloat(document.getElementById("awal2").value) || 0;
-          const akhir2 =
-            parseFloat(document.getElementById("akhir2").value) || 0;
+          awal2 = parseFloat(document.getElementById("awal2").value) || 0;
+          akhir2 = parseFloat(document.getElementById("akhir2").value) || 0;
           liter2 = akhir2 - awal2;
           pendapatanMesin2 = liter2 * harga;
         }
@@ -338,26 +341,41 @@
 
         const hasilAkhir = totalPendapatan - totalPengeluaran;
 
-        document.getElementById("hasil").innerHTML = `
-          <h3>🧾 Hasil Perhitungan</h3>
-          Jenis Bensin: <b>${jenis.toUpperCase()}</b><br>
-          <b>Mesin 1:</b> ${formatRupiah(liter1)} liter — Rp ${formatRupiah(
-          pendapatanMesin1
+        // Tampilkan hasil seperti struk
+        let output = `
+      <h3>🧾 Hasil Perhitungan</h3>
+      Jenis Bensin: <b>${jenis.toUpperCase()}</b><br><br>
+      Liter Akhir Mesin 1: ${formatRupiah(akhir1)}<br>
+      Liter Awal Mesin 1: ${formatRupiah(awal1)}<br>
+      ------------------------------<br>
+      Total Liter Mesin 1: ${formatRupiah(liter1)} x Rp ${formatRupiah(
+          harga
+        )} = Rp ${formatRupiah(pendapatanMesin1)}<br>
+    `;
+
+        if (jenis === "pertamax") {
+          output += `
+        <br>Liter Akhir Mesin 2: ${formatRupiah(akhir2)}<br>
+        Liter Awal Mesin 2: ${formatRupiah(awal2)}<br>
+        ------------------------------<br>
+        Total Liter Mesin 2: ${formatRupiah(liter2)} x Rp ${formatRupiah(
+            harga
+          )} = Rp ${formatRupiah(pendapatanMesin2)}<br>
+      `;
+        }
+
+        output += `
+      <br><b>Total Semua Liter:</b> ${formatRupiah(
+        totalLiter
+      )} liter<br><b>Total Pendapatan:</b> Rp ${formatRupiah(
+          totalPendapatan
         )}<br>
-          ${
-            jenis === "pertamax"
-              ? `<b>Mesin 2:</b> ${formatRupiah(
-                  liter2
-                )} liter — Rp ${formatRupiah(pendapatanMesin2)}<br>`
-              : ""
-          }
-          <br><b>Total Liter Terjual:</b> ${formatRupiah(totalLiter)} liter<br>
-          <b>Total Pendapatan Sebelum Pengeluaran:</b> Rp ${formatRupiah(
-            totalPendapatan
-          )}<br>
-          ${rincian ? `<br><b>Pengeluaran:</b>${rincian}<br>` : ""}
-          <br><b>Total Akhir:</b> Rp ${formatRupiah(hasilAkhir)}
-        `;
+      ${rincian ? `<br><b>Pengeluaran:</b>${rincian}<br>` : ""}
+      ------------------------------<br>
+      <b>Hasil Akhir:</b> Rp ${formatRupiah(hasilAkhir)}
+    `;
+
+        document.getElementById("hasil").innerHTML = output;
       }
     </script>
   </body>
