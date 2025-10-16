@@ -270,18 +270,18 @@
         const div = document.createElement("div");
         div.className = "pengeluaran-item";
         div.innerHTML = `
-          <select class="jenis-pengeluaran">
-            <option value="Setor">Setor</option>
-            <option value="Mandiri">Mandiri</option>
-            <option value="My Pertamina">My Pertamina</option>
-            <option value="Logam">Logam</option>
-            <option value="Uang Makan">Uang Makan</option>
-            <option value="Lainnya">Lainnya</option>
-          </select>
-          <input type="number" class="nilai-pengeluaran" placeholder="Nominal (Rp)" step="100">
-          <input type="text" class="keterangan-pengeluaran" placeholder="Keterangan (opsional)">
-          <button type="button" onclick="hapusPengeluaran(this)">❌</button>
-        `;
+      <select class="jenis-pengeluaran">
+        <option value="Setor">Setor</option>
+        <option value="Mandiri">Mandiri</option>
+        <option value="My Pertamina">My Pertamina</option>
+        <option value="Logam">Logam</option>
+        <option value="Uang Makan">Uang Makan</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+      <input type="number" class="nilai-pengeluaran" placeholder="Nominal (Rp)" step="100">
+      <input type="text" class="keterangan-pengeluaran" placeholder="Keterangan (opsional)">
+      <button type="button" onclick="hapusPengeluaran(this)">❌</button>
+    `;
         document.getElementById("pengeluaranList").appendChild(div);
       }
 
@@ -338,26 +338,41 @@
 
         const hasilAkhir = totalPendapatan - totalPengeluaran;
 
-        document.getElementById("hasil").innerHTML = `
-          <h3>🧾 Hasil Perhitungan</h3>
-          Jenis Bensin: <b>${jenis.toUpperCase()}</b><br>
-          <b>Mesin 1:</b> ${formatRupiah(liter1)} liter — Rp ${formatRupiah(
-          pendapatanMesin1
+        // Format hasil seperti struk
+        let output = `
+      <h3>🧾 Hasil Perhitungan</h3>
+      <b>Jenis Bensin:</b> ${jenis.toUpperCase()}<br><br>
+      Liter Akhir Mesin 1: ${formatRupiah(akhir1)}<br>
+      Liter Awal Mesin 1: ${formatRupiah(awal1)}<br>
+      ------------------------------<br>
+      Total Liter: ${formatRupiah(liter1)} x Rp ${formatRupiah(
+          harga
+        )} = Rp ${formatRupiah(pendapatanMesin1)}<br>`;
+
+        if (jenis === "pertamax") {
+          output += `
+        <br>Liter Akhir Mesin 2: ${formatRupiah(
+          akhir2
+        )}<br>Liter Awal Mesin 2: ${formatRupiah(
+            awal2
+          )}<br>------------------------------<br>
+        Total Liter Mesin 2: ${formatRupiah(liter2)} x Rp ${formatRupiah(
+            harga
+          )} = Rp ${formatRupiah(pendapatanMesin2)}<br>`;
+        }
+
+        output += `
+      <br><b>Total Semua Liter:</b> ${formatRupiah(
+        totalLiter
+      )} liter<br><b>Total Pendapatan:</b> Rp ${formatRupiah(
+          totalPendapatan
         )}<br>
-          ${
-            jenis === "pertamax"
-              ? `<b>Mesin 2:</b> ${formatRupiah(
-                  liter2
-                )} liter — Rp ${formatRupiah(pendapatanMesin2)}<br>`
-              : ""
-          }
-          <br><b>Total Liter Terjual:</b> ${formatRupiah(totalLiter)} liter<br>
-          <b>Total Pendapatan Sebelum Pengeluaran:</b> Rp ${formatRupiah(
-            totalPendapatan
-          )}<br>
-          ${rincian ? `<br><b>Pengeluaran:</b>${rincian}<br>` : ""}
-          <br><b>Total Akhir:</b> Rp ${formatRupiah(hasilAkhir)}
-        `;
+      ${rincian ? `<br><b>Pengeluaran:</b>${rincian}<br>` : ""}
+      ------------------------------<br>
+      <b>Hasil Akhir:</b> Rp ${formatRupiah(hasilAkhir)}
+    `;
+
+        document.getElementById("hasil").innerHTML = output;
       }
     </script>
   </body>
