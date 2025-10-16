@@ -348,7 +348,7 @@
       L1: ${formatRupiah(akhir1)}<br>
       L1: ${formatRupiah(awal1)}<br>
       ------------------------------<br>
-      Total L1: ${formatRupiah(liter1)} x Rp ${formatRupiah(
+      ${formatRupiah(liter1)} x Rp ${formatRupiah(
           harga
         )} = Rp ${formatRupiah(pendapatanMesin1)}<br>
     `;
@@ -358,16 +358,14 @@
         <br>L2: ${formatRupiah(akhir2)}<br>
         L2: ${formatRupiah(awal2)}<br>
         ------------------------------<br>
-        Total L2: ${formatRupiah(liter2)} x Rp ${formatRupiah(
+        ${formatRupiah(liter2)} x Rp ${formatRupiah(
             harga
           )} = Rp ${formatRupiah(pendapatanMesin2)}<br>
       `;
         }
 
         output += `
-      <br><b>Total Semua Liter:</b> ${formatRupiah(
-        totalLiter
-      )} liter<br><b>Total Pendapatan:</b> Rp ${formatRupiah(
+      <br><b>Total Pendapatan:</b> Rp ${formatRupiah(
           totalPendapatan
         )}<br>
       ${rincian ? `<br><b>Pengeluaran:</b>${rincian}<br>` : ""}
