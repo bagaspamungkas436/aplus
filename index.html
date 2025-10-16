@@ -362,14 +362,14 @@
         }
 
         output += `
-      <br><b>Total</b> ${formatRupiah(
+      <br><b>Total Semua Liter:</b> ${formatRupiah(
         totalLiter
       )} liter<br><b>Total Pendapatan:</b> Rp ${formatRupiah(
           totalPendapatan
         )}<br>
       ${rincian ? `<br><b>Pengeluaran:</b>${rincian}<br>` : ""}
       ------------------------------<br>
-      <b></b> Rp ${formatRupiah(hasilAkhir)}
+      <b>Hasil Akhir:</b> Rp ${formatRupiah(hasilAkhir)}
     `;
 
         document.getElementById("hasil").innerHTML = output;
